@@ -1,15 +1,32 @@
 # 🚀 120Hz Autonomous Rocket Vehicle ("Flying Tesla") Landing Simulator
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Three.js](https://img.shields.io/badge/Three.js-WebGL-black?style=flat&logo=three.js&logoColor=white)](https://threejs.org/)
-[![Gymnasium](https://img.shields.io/badge/Gymnasium-RL%20Environment-blue?style=flat)](https://gymnasium.farama.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <img src="docs/assets/simulation_demo.gif" width="380" alt="Flying Tesla Autonomous Flight Simulation Demo" />
+  <br>
+  <em>100% Real-Time Inference (SAC + DAgger) & 120Hz Newton Dynamics in WebGL</em>
+</p>
+
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white" alt="Python" /></a>
+  <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white" alt="PyTorch" /></a>
+  <a href="https://threejs.org/"><img src="https://img.shields.io/badge/Three.js-120%20FPS%20WebGL-black?style=flat&logo=three.js&logoColor=white" alt="Three.js" /></a>
+  <a href="https://gymnasium.farama.org/"><img src="https://img.shields.io/badge/Gymnasium-RL%20Environment-blue?style=flat" alt="Gymnasium" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" /></a>
+</p>
 
 An end-to-end autonomous flight control and hoverslam landing simulation combining **Reinforcement Learning (SAC & DAgger)**, **Rigid-Body Aerospace Dynamics**, and **Client-Side 120 FPS WebGL Visualization**.
 
 > [!IMPORTANT]
-> **Zero Mock / Pre-baked Data Guarantee:** Every movement, flame particle, and actuator output seen in the 3D viewport is computed in real time. The trained PyTorch neural network weights run directly in pure JavaScript via 120Hz matrix multiplication and Symplectic Euler physics.
+> **Zero Mock / Pre-baked Data Guarantee:** Every movement, thruster exhaust plume, and actuator output seen in the 3D viewport is computed live. The trained PyTorch neural network weights run directly in pure JavaScript via 120Hz matrix multiplication and Symplectic Euler physics.
+
+---
+
+## 📸 Simulation Showcase
+
+| 1. Inverted C-Loop Launch | 2. 3D Neural Synapses & Retro-Burn | 3. Soft Touchdown & Ground Cushion |
+| :---: | :---: | :---: |
+| <img src="docs/assets/c_loop_launch.jpg" width="250" alt="Inverted C-Loop Launch" /> | <img src="docs/assets/neural_network_hud.jpg" width="250" alt="Neural Network HUD" /> | <img src="docs/assets/touchdown_pad.jpg" width="250" alt="Touchdown on Pad" /> |
+| *Ramp acceleration up to 90 km/h* | *12-in $\to$ 8-out real-time inference* | *Target touchdown with $|v_z| \le 1.5$ m/s* |
 
 ---
 
@@ -136,7 +153,7 @@ python hover/train.py
 │   │   ├── export_physics_config.py # Sync script to JS
 │   │   ├── dynamics.py              # 120Hz symplectic rigid-body mechanics
 │   │   ├── env.py                   # Gymnasium RL environment
-│   │   ├── expert.py                # Trajectory reference controller
+│   │   ├── expert.py                # Reference controller
 │   │   └── launch.py                # C-Loop ramp kinematics
 │   ├── web/                   # Real-time WebGL Simulator
 │   │   ├── index.html         # Three.js viewport & primary flight HUD
