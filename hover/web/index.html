@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rocket Landing AI | 120Hz Reinforcement Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+  <!-- Three.js 3D Sahne Tuvali -->
+  <canvas id="three-viewport"></canvas>
+
+  <!-- Profesyonel Askeri Uçak & NASA Spacecraft Primer Uçuş HUD Tuvali -->
+  <canvas id="aircraft-hud-canvas"></canvas>
+
+  <!-- Video Modu Hamburger Menü Butonu (Yalnızca Video Modunda Görünür) -->
+  <button id="btn-hamburger" onclick="toggleHamburgerMenu()" title="Menüyü Aç / Kapat (Kısayol: M)">
+    <span class="hamburger-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <span class="hamburger-label" id="txt-menu-label">MENÜ</span>
+  </button>
+
+  <!-- Hamburger Kontrol Drawer (Video Modu İçin Yan Çekmece) -->
+  <div id="drawer-backdrop" class="drawer-backdrop" onclick="toggleHamburgerMenu(false)"></div>
+  <aside id="video-drawer" class="video-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title" id="txt-drawer-title">KONTROL PANELİ</div>
+      <button class="drawer-close-btn" onclick="toggleHamburgerMenu(false)" title="Kapat (Escape)">✕</button>
+    </div>
+    <div class="drawer-content">
+
+
+      <!-- Video Modundan Çıkış ve Dil -->
+      <div class="drawer-section">
+        <div class="drawer-section-title" id="txt-d-view">GÖRÜNÜM AYARLARI</div>
+        <div class="drawer-grid-2">
+          <button class="drawer-btn primary" onclick="toggleVideoMode(); toggleHamburgerMenu(false);">
+            <span id="txt-d-exit-video">VİDEO MODUNDAN ÇIK</span>
+          </button>
+          <button class="drawer-btn" id="d-btn-lang" onclick="toggleLanguage()">
+            <span id="txt-d-lang">DİL: EN</span>
+          </button>
+          <button class="drawer-btn" id="d-btn-hud" onclick="toggleAircraftHUD()">
+            <span id="txt-d-hud">HUD: MİNİMAL</span>
+          </button>
+          <button class="drawer-btn" id="d-btn-hud-theme" onclick="toggleAircraftHUDTheme()">
+            <span id="txt-d-hud-theme">RENK: YEŞİL</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Arena Aksiyonları -->
+      <div class="drawer-section" id="d-arena-section">
+        <div class="drawer-section-title" id="txt-d-actions">ARENA AKSİYONLARI</div>
+        <div class="drawer-grid-2">
+          <button class="drawer-btn launch" onclick="arenaLaunchRamp(); toggleHamburgerMenu(false);"><span class="kbd-pill">1</span>RAMPADAN FIRLAT</button>
+          <button class="drawer-btn" onclick="arenaDropHigh(); toggleHamburgerMenu(false);"><span class="kbd-pill">2</span>TERS BIRAK</button>
+          <button class="drawer-btn" onclick="arenaRandomFling(); toggleHamburgerMenu(false);"><span class="kbd-pill">3</span>KAOTİK FIRLAT</button>
+          <button class="drawer-btn" onclick="arenaTriggerWind(); toggleHamburgerMenu(false);"><span class="kbd-pill">4</span>YAN RÜZGAR</button>
+        </div>
+      </div>
+
+      <!-- Oynatma & Kayıt -->
+      <div class="drawer-section">
+        <div class="drawer-section-title" id="txt-d-playback">OYNATMA & KAYIT</div>
+        <div class="drawer-grid-2">
+          <button class="drawer-btn" id="d-btn-play" onclick="togglePlayPause()">DURAKLAT</button>
+          <button class="drawer-btn rec" onclick="toggleRecording()">VİDEO KAYDET</button>
+          <button class="drawer-btn" onclick="resetCameraView(); toggleHamburgerMenu(false);">Kamerayı Sıfırla</button>
+          <button class="drawer-btn" id="d-btn-sound" onclick="toggleSound()">SES: AÇIK</button>
+        </div>
+      </div>
+
+      <!-- Canlı Telemetriyi Video Modunda Gösterme Seçeneği -->
+      <div class="drawer-section">
+        <div class="drawer-section-title" id="txt-d-hud-toggle">TELEMETRİ PANELİ</div>
+        <button class="drawer-btn" id="d-btn-toggle-tele" onclick="toggleVideoHUD()">
+          SOL TELEMETRİYİ GÖSTER / GİZLE
+        </button>
+      </div>
+    </div>
+  </aside>
+
+    <!-- Tek Canlı 120Hz Arena Göstergesi -->
+    <nav class="mode-nav-tabs" id="main-mode-tabs">
+      <div class="mode-tab-btn active" id="btn-tab-arena" style="cursor: default; pointer-events: none;">
+        CANLI 120Hz ARENA
+      </div>
+    </nav>
+
+    <!-- Kamera & Ses & Video & Dil Araçları -->
+    <div class="top-actions">
+      <button class="btn-top-util" id="btn-video-mode" onclick="toggleVideoMode()">VİDEO MODU (SEKMELERİ GİZLE)</button>
+      <button class="btn-top-util" id="btn-hud-toggle" onclick="toggleAircraftHUD()" title="Askeri Uçak / NASA HUD Modunu Değiştir (Kısayol: H)">HUD: MİNİMAL</button>
+      <button class="btn-top-util" id="btn-hud-theme" onclick="toggleAircraftHUDTheme()" title="HUD Rengini Değiştir (Yeşil / NASA Camgöbeği)">RENK: YEŞİL</button>
+      <button class="btn-top-util" id="btn-lang-toggle" onclick="toggleLanguage()">EN</button>
+      <div class="cam-hint-pill" id="cam-hint-pill">
+        Fare: Çevir / Kaydır / Zoom
+      </div>
+      <button class="btn-top-util" id="btn-reset-cam" onclick="resetCameraView()">Kamerayı Sıfırla</button>
+      <button class="btn-top-util" id="btn-sound" onclick="toggleSound()">SES: AÇIK</button>
+    </div>
+  </header>
+
+  <!-- SOL TELEMETRİ VE METRİK HUD KARTI (NASA / ASKERİ MFD GLASS COCKPIT) -->
+  <aside class="left-hud-panel" id="mfd-telemetry-panel">
+    <!-- MFD Üst Durum Şeridi -->
+    <div class="mfd-header">
+      <span class="mfd-tag"><span class="mfd-blinker">●</span> MFD-01 // NASA-SAC PFD</span>
+      <span class="mfd-rate">120Hz FIXED-STEP</span>
+    </div>
+
+    <div>
+      <div class="hud-section-title" id="txt-status-title">UÇUŞ DURUMU & C&W MATRİKSİ</div>
+      <div class="flight-status-card">
+        <div class="status-pulse-dot" id="hud-status-dot"></div>
+        <div class="stage-badge soft" id="hud-stage-badge">SOFT LANDING</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hud-section-title" id="txt-tele-title">PRIMER UÇUŞ TELEMETRİSİ (PFD)</div>
+      <div class="tele-grid">
+        <div class="tele-item">
+          <span class="lbl" id="lbl-alt">RADALT (Z)</span>
+          <span class="val" id="hud-alt">0.0 m</span>
+          <span class="limit" id="sub-alt">Hedef: 0.7m</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-xerr">HEDEF HATASI (ΔX)</span>
+          <span class="val" id="hud-xerr">0.0 m</span>
+          <span class="limit" id="sub-xerr">Pist: X = -62m</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-vz">VVI (DİKEY HIZ)</span>
+          <span class="val" id="hud-vz">0.0 m/s</span>
+          <span class="limit" id="sub-vz">İniş: ≤ 1.5 m/s</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-vx">IAS (YATAY HIZ)</span>
+          <span class="val" id="hud-vx">0.0 m/s</span>
+          <span class="limit" id="sub-vx">İniş: ≤ 2.5 m/s</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-pitch">PITCH EĞİMİ (θ)</span>
+          <span class="val" id="hud-pitch">0.0°</span>
+          <span class="limit" id="sub-pitch">İniş: ≤ 8.0°</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-roll">ROLL BURGU (φ)</span>
+          <span class="val" id="hud-roll">0.0°</span>
+          <span class="limit" id="sub-roll">360° Burgu</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-omega">PITCH HIZI (q)</span>
+          <span class="val" id="hud-omega">0.0 rad/s</span>
+          <span class="limit" id="sub-omega">Açısal Hız</span>
+        </div>
+        <div class="tele-item">
+          <span class="lbl" id="lbl-omega-roll">ROLL HIZI (p)</span>
+          <span class="val" id="hud-omega-roll">0.0 rad/s</span>
+          <span class="limit" id="sub-omega-roll">RCS Torku</span>
+        </div>
+        <div class="tele-item tele-highlight">
+          <span class="lbl" id="lbl-gforce">G-LOAD (ACCEL)</span>
+          <span class="val" id="hud-gforce">1.00 G</span>
+          <span class="limit" id="sub-gforce">Pik: 1.0G</span>
+        </div>
+        <div class="tele-item tele-highlight">
+          <span class="lbl" id="lbl-fuel">PROPELLANT (ISP 260)</span>
+          <span class="val" id="hud-fuel">45.0 kg</span>
+          <div class="fuel-bar-track">
+            <div id="hud-fuel-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hud-section-title" id="txt-act-title">EICAS // 8x İTİCİ AKTÜATÖR SİSTEMİ</div>
+      <div class="actuators-box">
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-t1">MAIN FL</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill thruster" id="hud-t1-bar"></div></div>
+          <span class="pct" id="hud-t1-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-t2">MAIN FR</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill thruster" id="hud-t2-bar"></div></div>
+          <span class="pct" id="hud-t2-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-t3">MAIN RL</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill thruster" id="hud-t3-bar"></div></div>
+          <span class="pct" id="hud-t3-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-t4">MAIN RR</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill thruster" id="hud-t4-bar"></div></div>
+          <span class="pct" id="hud-t4-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-rcs1">RCS LF</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill rcs" id="hud-rcs1-bar"></div></div>
+          <span class="pct" id="hud-rcs1-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-rcs2">RCS LR</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill rcs" id="hud-rcs2-bar"></div></div>
+          <span class="pct" id="hud-rcs2-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-rcs3">RCS RF</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill rcs" id="hud-rcs3-bar"></div></div>
+          <span class="pct" id="hud-rcs3-pct">0%</span>
+        </div>
+        <div class="act-row">
+          <span class="lbl" id="lbl-act-rcs4">RCS RR</span>
+          <div class="act-bar-wrap"><div class="act-bar-fill rcs" id="hud-rcs4-bar"></div></div>
+          <span class="pct" id="hud-rcs4-pct">0%</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ALT KONTROL DOCK PANELİ -->
+    <!-- Arena Modu Kontrolleri & Video Kayıt -->
+    <div class="arena-action-row" id="arena-controls" style="display: flex;">
+      <button class="btn-arena btn-launch" id="btn-arena-launch" onclick="arenaLaunchRamp()" title="Kısayol: 1">
+        <span class="kbd-pill">1</span>RAMPADAN FIRLAT
+      </button>
+      <button class="btn-arena" id="btn-arena-drop" onclick="arenaDropHigh()" title="Kısayol: 2">
+        <span class="kbd-pill">2</span>TERS BIRAK
+      </button>
+      <button class="btn-arena" id="btn-arena-fling" onclick="arenaRandomFling()" title="Kısayol: 3">
+        <span class="kbd-pill">3</span>KAOTİK FIRLAT
+      </button>
+      <button class="btn-arena" id="btn-arena-wind" onclick="arenaTriggerWind()" title="Kısayol: 4">
+        <span class="kbd-pill">4</span>YAN RÜZGAR
+      </button>
+      <button class="btn-action-primary" id="btn-record" onclick="toggleRecording()" style="margin-left: 8px;">
+        <span class="rec-pulse-dot" style="display:none;" id="rec-dot"></span>
+        <span id="rec-label">VİDEO KAYDET</span>
+      </button>
+    </div>
+  </footer>
+
+  <script src="./lib/three.min.js"></script>
+  <script src="./lib/OrbitControls.js"></script>
+  <script src="./lib/EffectComposer.js"></script>
+  <script src="./lib/CopyShader.js"></script>
+  <script src="./lib/LuminosityHighPassShader.js"></script>
+  <script src="./lib/ShaderPass.js"></script>
+  <script src="./lib/RenderPass.js"></script>
+  <script src="./lib/UnrealBloomPass.js"></script>
+  <script src="./lib/gsap.min.js"></script>
+
+  <script type="module" src="./js/app.js?v=3"></script>
+</body>
+</html>

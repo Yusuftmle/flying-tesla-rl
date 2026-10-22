@@ -1,0 +1,67 @@
+{
+  "0": {
+    "title": "tumbles",
+    "metrics": {
+      "mean_reward": -150.0,
+      "soft_landing_rate": 0.0,
+      "crash_rate": 1.0,
+      "mean_touch_vz": 8.5,
+      "mean_touch_vx": 18.2,
+      "roll_completion_rate": 0.0,
+      "title": "tumbles"
+    },
+    "frames": 174
+  },
+  "20000": {
+    "title": "tumbles",
+    "metrics": {
+      "mean_reward": -120.0,
+      "soft_landing_rate": 0.0,
+      "crash_rate": 1.0,
+      "mean_touch_vz": 8.5,
+      "mean_touch_vx": 18.2,
+      "roll_completion_rate": 0.35,
+      "title": "tumbles"
+    },
+    "frames": 174
+  },
+  "100000": {
+    "title": "flips but crashes",
+    "metrics": {
+      "mean_reward": 0.0,
+      "soft_landing_rate": 0.0,
+      "crash_rate": 1.0,
+      "mean_touch_vz": 8.5,
+      "mean_touch_vx": 18.2,
+      "roll_completion_rate": 1.0,
+      "title": "flips but crashes"
+    },
+    "frames": 176
+  },
+  "300000": {
+    "title": "lands hard",
+    "metrics": {
+      "mean_reward": 300.0,
+      "soft_landing_rate": 0.12,
+      "crash_rate": 0.88,
+      "mean_touch_vz": 3.2,
+      "mean_touch_vx": 4.8,
+      "roll_completion_rate": 1.0,
+      "title": "lands hard"
+    },
+    "frames": 184
+  },
+  "1000000": {
+    "title": "soft landing",
+    "metrics": {
+      "mean_reward": 450.0,
+      "soft_landing_rate": 0.98,
+      "crash_rate": 0.02,
+      "mean_touch_vz": 0.54,
+      "mean_touch_vx": 2.21,
+      "roll_completion_rate": 1.0,
+      "title": "soft landing"
+    },
+    "frames": 238
+  }
+}

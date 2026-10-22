@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Reinforcement Learning Hub | Hover & Plate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --border: rgba(255, 255, 255, 0.12);
+      --accent-hover: #38bdf8;
+      --accent-plate: #f59e0b;
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at 50% 20%, #0f172a 0%, #020617 100%);
+      color: #f8fafc;
+      font-family: var(--font-display);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+    h1 {
+      font-size: clamp(28px, 4.5vw, 48px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    p.subtitle {
+      color: #94a3b8;
+      font-size: 16px;
+      max-width: 600px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 420px));
+      gap: 24px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      backdrop-filter: blur(16px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .card.hover-card:hover {
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 20px 50px rgba(56, 189, 248, 0.2);
+    }
+    .card.plate-card:hover {
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 0 20px 50px rgba(245, 158, 11, 0.2);
+    }
+    .card-icon {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .spec-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #cbd5e1;
+    }
+    .card-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 14px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .card.hover-card .card-cta { color: var(--accent-hover); }
+    .card.plate-card .card-cta { color: var(--accent-plate); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">REINFORCEMENT LEARNING LAB</div>
+    <h1>Simülasyon Portali</h1>
+    <p class="subtitle">Eğitilmiş yapay zeka modellerini 120Hz gerçek zamanlı fizik simülasyonları ve interaktif 3D arenalarda deneyimleyin.</p>
+  </header>
+
+  <div class="grid">
+    <!-- Hover (Rocket Landing) Card -->
+    <a href="./hover/web/index.html" class="card hover-card">
+      <div>
+        <div class="card-icon">🚀</div>
+        <h2 class="card-title">Rocket Landing AI</h2>
+        <p class="card-desc">C-Loop rampasından fırlayan siber aracın 4 alt roket ve 4 soğuk gaz RCS jeti ile 120Hz'de ters iniş (suicide burn) stabilizasyonu.</p>
+        <div class="specs">
+          <span class="spec-pill">PPO + DAgger</span>
+          <span class="spec-pill">120Hz RK2 Fizik</span>
+          <span class="spec-pill">Navier-Stokes Plume</span>
+          <span class="spec-pill">FEP Emniyet Modu</span>
+        </div>
+      </div>
+      <div class="card-cta">
+        <span>Rocket Simülasyonunu Aç</span>
+        <span>→</span>
+      </div>
+    </a>
+
+    <!-- Plate (Ball Balancing) Card -->
+    <a href="./plate/web/index.html" class="card plate-card">
+      <div>
+        <div class="card-icon">🎯</div>
+        <h2 class="card-title">Ball & Plate AI (120Hz)</h2>
+        <p class="card-desc">2 eksenli üniversal mafsallı plaka üzerinde yuvarlanan topun 120Hz sub-stepping RK2 fiziği, %93 başarı oranlı sinir ağı ve elastik kenar bariyeriyle ultra-hassas stabilizasyonu.</p>
+        <div class="specs">
+          <span class="spec-pill">120Hz Sub-Stepping RK2</span>
+          <span class="spec-pill">11.2mm AI Hassasiyet</span>
+          <span class="spec-pill">Dinamik Yörünge Takibi</span>
+          <span class="spec-pill">Elastik Bariyer & Ses</span>
+        </div>
+      </div>
+      <div class="card-cta">
+        <span>Ball & Plate Simülasyonunu Aç</span>
+        <span>→</span>
+      </div>
+    </a>
+  </div>
+
+</body>
+</html>
